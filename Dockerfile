@@ -56,6 +56,9 @@ COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/tsconfig.json /app/
 COPY --from=builder /app/pnpm-lock.yaml /app/
 
+# Set Node.js memory management flags
+ENV NODE_OPTIONS="--max-old-space-size=512"
+
 EXPOSE 3000
-# Set the command to run the application
-CMD ["pnpm", "start", "--non-interactive"]
+# Set the command to run the application with memory management
+CMD ["node", "--max-old-space-size=512", "--loader", "ts-node/esm", "src/index.ts", "--characters=characters/spinor.character.json"]
